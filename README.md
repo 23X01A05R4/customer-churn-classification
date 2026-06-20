@@ -131,6 +131,28 @@ Or with JupyterLab:
 jupyter lab
 ```
 
+### 5. Run the Training, CLI, or Web Application
+
+You can execute model training, run interactive CLI predictions, or launch the interactive web dashboard using these commands:
+
+* **Train the Model Pipeline:**
+  Generates the ROC-AUC comparison plot and serializes the best Random Forest pipeline into `churn_model_pipeline.joblib`.
+  ```bash
+  python train.py
+  ```
+
+* **Run Interactive CLI Prediction Terminal:**
+  A command-line script that loads the serialized model and prompts you for details to predict customer churn risk.
+  ```bash
+  python predict.py
+  ```
+
+* **Launch the Interactive Web Dashboard:**
+  Starts the Flask web server. Navigate to `http://127.0.0.1:5000` to interact with a gorgeous dashboard interface containing risk meters, model comparisons, and customer insights.
+  ```bash
+  python app.py
+  ```
+
 ---
 
 ## 🛠️ Technologies Used

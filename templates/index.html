@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TeleChurn customer churn prediction dashboard. Perform real-time machine learning predictions, evaluate churn risk factors, and view classifier analytics.">
+    <title>TeleChurn - Customer Churn Analytics & Prediction Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icon">🔄</span>
+                <h1>TeleChurn</h1>
+                <span class="badge badge-indigo">ML Model Pipeline</span>
+            </div>
+            <p class="tagline">Interactive Churn Risk Analysis Dashboard</p>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Grid layout for the predictive form and the analytics output -->
+        <div class="dashboard-grid">
+            
+            <!-- LEFT COLUMN: Predictive input form -->
+            <section class="card form-card" aria-labelledby="form-title">
+                <h2 id="form-title" class="card-title">Customer Churn Predictor</h2>
+                <p class="card-subtitle">Input key customer characteristics to predict churn probability in real time.</p>
+                
+                <form id="churn-form" class="churn-form" novalidate>
+                    <!-- Critical Features Group -->
+                    <fieldset class="form-group-box">
+                        <legend class="group-legend">Key Churn Indicators</legend>
+                        
+                        <!-- Contract Type Dropdown -->
+                        <div class="form-control">
+                            <label for="Contract">Contract Type <span class="required">*</span></label>
+                            <select id="Contract" name="Contract" required>
+                                <option value="Month-to-month" selected>Month-to-month (High Risk)</option>
+                                <option value="One year">One year</option>
+                                <option value="Two year">Two year (Low Risk)</option>
+                            </select>
+                        </div>
+
+                        <!-- Tenure Slider -->
+                        <div class="form-control">
+                            <div class="label-row">
+                                <label for="tenure">Tenure (Months)</label>
+                                <span id="tenure-val" class="value-display">12 months</span>
+                            </div>
+                            <input type="range" id="tenure" name="tenure" min="1" max="72" value="12" step="1">
+                            <span class="range-hint">Longer tenure significantly reduces churn probability.</span>
+                        </div>
+
+                        <!-- Monthly Charges Slider -->
+                        <div class="form-control">
+                            <div class="label-row">
+                                <label for="MonthlyCharges">Monthly Charges ($)</label>
+                                <span id="monthly-charges-val" class="value-display">$75.00</span>
+                            </div>
+                            <input type="range" id="MonthlyCharges" name="MonthlyCharges" min="20" max="120" value="75" step="1">
+                        </div>
+                    </fieldset>
+
+                    <!-- Advanced Feature Set Toggle -->
+                    <div class="advanced-toggle-wrapper">
+                        <button type="button" id="advanced-toggle-btn" class="btn-link" aria-expanded="false" aria-controls="advanced-fields">
+                            ⚙️ Advanced Customer Profile (Click to expand)
+                        </button>
+                    </div>
+
+                    <!-- Collapsible Advanced Features Panel -->
+                    <div id="advanced-fields" class="advanced-fields-panel collapsed" aria-hidden="true">
+                        <div class="advanced-grid">
+                            <!-- Internet Service Dropdown -->
+                            <div class="form-control">
+                                <label for="InternetService">Internet Service</label>
+                                <select id="InternetService" name="InternetService">
+                                    <option value="Fiber optic" selected>Fiber optic (High Risk)</option>
+                                    <option value="DSL">DSL</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
+                            <!-- Payment Method Dropdown -->
+                            <div class="form-control">
+                                <label for="PaymentMethod">Payment Method</label>
+                                <select id="PaymentMethod" name="PaymentMethod">
+                                    <option value="Electronic check" selected>Electronic check (High Risk)</option>
+                                    <option value="Mailed check">Mailed check</option>
+                                    <option value="Bank transfer">Bank transfer</option>
+                                    <option value="Credit card">Credit card</option>
+                                </select>
+                            </div>
+
+                            <!-- Online Security Dropdown -->
+                            <div class="form-control">
+                                <label for="OnlineSecurity">Online Security</label>
+                                <select id="OnlineSecurity" name="OnlineSecurity">
+                                    <option value="No" selected>No</option>
+                                    <option value="Yes">Yes (Reduces Churn)</option>
+                                    <option value="No internet service">No internet service</option>
+                                </select>
+                            </div>
+
+                            <!-- Tech Support Dropdown -->
+                            <div class="form-control">
+                                <label for="TechSupport">Tech Support</label>
+                                <select id="TechSupport" name="TechSupport">
+                                    <option value="No" selected>No</option>
+                                    <option value="Yes">Yes (Reduces Churn)</option>
+                                    <option value="No internet service">No internet service</option>
+                                </select>
+                            </div>
+
+                            <!-- Paperless Billing Dropdown -->
+                            <div class="form-control">
+                                <label for="PaperlessBilling">Paperless Billing</label>
+                                <select id="PaperlessBilling" name="PaperlessBilling">
+                                    <option value="Yes" selected>Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+
+                            <!-- Senior Citizen Dropdown -->
+                            <div class="form-control">
+                                <label for="SeniorCitizen">Senior Citizen</label>
+                                <select id="SeniorCitizen" name="SeniorCitizen">
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+
+                            <!-- Partner Dropdown -->
+                            <div class="form-control">
+                                <label for="Partner">Partner</label>
+                                <select id="Partner" name="Partner">
+                                    <option value="No" selected>No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+
+                            <!-- Dependents Dropdown -->
+                            <div class="form-control">
+                                <label for="Dependents">Dependents</label>
+                                <select id="Dependents" name="Dependents">
+                                    <option value="No" selected>No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn btn-primary">
+                        <span class="btn-text">Analyze Customer Profile</span>
+                        <span class="loader hidden"></span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- RIGHT COLUMN: Analytics Results and Model Performance Info -->
+            <div class="results-column">
+                
+                <!-- Prediction Output Card -->
+                <section class="card results-card" id="prediction-results" aria-labelledby="results-title">
+                    <h2 id="results-title" class="card-title">Prediction Result</h2>
+                    
+                    <!-- Placeholder State -->
+                    <div id="results-placeholder" class="results-placeholder">
+                        <div class="placeholder-icon">🔮</div>
+                        <p>Fill out the customer profile and click <strong>"Analyze Customer Profile"</strong> to compute prediction metrics.</p>
+                    </div>
+
+                    <!-- Active Result State -->
+                    <div id="results-active" class="results-active hidden">
+                        <div class="results-header">
+                            <div id="prediction-badge" class="result-badge">SAFE</div>
+                            <div class="risk-label-wrapper">
+                                <span class="risk-label-title">Risk Level:</span>
+                                <span id="risk-level-badge" class="risk-badge">Low</span>
+                            </div>
+                        </div>
+
+                        <div class="results-body">
+                            <!-- Circular Probability Gauge -->
+                            <div class="gauge-wrapper">
+                                <div class="gauge-progress">
+                                    <div class="gauge-center">
+                                        <span id="churn-probability" class="probability-percentage">0.0%</span>
+                                        <span class="probability-label">Churn Risk</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p id="prediction-message" class="prediction-message">This customer is likely to stay.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Model Performance Card -->
+                <section class="card metrics-card" aria-labelledby="metrics-title">
+                    <h2 id="metrics-title" class="card-title">Model Performance & Insights</h2>
+                    
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="roc-curves">ROC Curves</button>
+                        <button class="tab-btn" data-tab="metrics-table">Metrics</button>
+                        <button class="tab-btn" data-tab="insights">Key Insights</button>
+                    </div>
+
+                    <div class="tab-content-wrapper">
+                        <!-- TAB 1: ROC Curves plot -->
+                        <div id="tab-roc-curves" class="tab-content active">
+                            <div class="plot-container">
+                                <img src="/static/models_performance_comparison.png" alt="Model comparison ROC Curves plotting Logistic Regression, Random Forest and Gradient Boosting metrics" class="performance-plot" onerror="this.src='/models_performance_comparison.png'">
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: Model Performance Metrics Table -->
+                        <div id="tab-metrics-table" class="tab-content">
+                            <div class="table-responsive">
+                                <table class="metrics-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Model</th>
+                                            <th>Accuracy</th>
+                                            <th>Precision</th>
+                                            <th>Recall</th>
+                                            <th>F1 Score</th>
+                                            <th>ROC-AUC</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="best-model-row">
+                                            <td>Random Forest 🏆</td>
+                                            <td>0.5119</td>
+                                            <td>0.5054</td>
+                                            <td>0.4810</td>
+                                            <td>0.4929</td>
+                                            <td>0.4982</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Logistic Regression</td>
+                                            <td>0.5009</td>
+                                            <td>0.4926</td>
+                                            <td>0.4000</td>
+                                            <td>0.4415</td>
+                                            <td>0.4748</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gradient Boosting</td>
+                                            <td>0.4804</td>
+                                            <td>0.4721</td>
+                                            <td>0.4517</td>
+                                            <td>0.4617</td>
+                                            <td>0.4628</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="table-caption">Random Forest selected as best predictor based on highest test set ROC-AUC score.</p>
+                        </div>
+
+                        <!-- TAB 3: Key Insights List -->
+                        <div id="tab-insights" class="tab-content">
+                            <ul class="insights-list">
+                                <li>
+                                    <span class="insight-icon red-icon">📝</span>
+                                    <div class="insight-content">
+                                        <h3>Contract Type</h3>
+                                        <p>Month-to-month contracts have the highest risk of churn. Transitioning customers to 1 or 2-year contracts drastically improves retention.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="insight-icon green-icon">⏳</span>
+                                    <div class="insight-content">
+                                        <h3>Tenure</h3>
+                                        <p>Customers with longer tenure display significantly lower probability of churn, suggesting loyalty grows over time.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="insight-icon red-icon">💳</span>
+                                    <div class="insight-content">
+                                        <h3>Payment Method</h3>
+                                        <p>Electronic check payments show higher churn rates compared to automated methods like bank transfers or credit cards.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span class="insight-icon red-icon">🌐</span>
+                                    <div class="insight-content">
+                                        <h3>Internet Service</h3>
+                                        <p>Fiber optic internet customers show higher churnRates, indicating possible service dissatisfaction or pricing pressures.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>© 2026 TeleChurn Analytics. All rights reserved. Created for Customer Retention Optimization.</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
