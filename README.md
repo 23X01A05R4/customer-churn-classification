@@ -6,7 +6,7 @@
 ![Pandas](https://img.shields.io/badge/Pandas-Data-150458?style=for-the-badge&logo=pandas&logoColor=white)
 
 A machine learning project that predicts **customer churn** using classification models. Built with scikit-learn, this project analyzes telecom customer data to identify customers likely to leave, enabling proactive retention strategies.
-
+ 
 ---
 
 ## 📌 Key Features
